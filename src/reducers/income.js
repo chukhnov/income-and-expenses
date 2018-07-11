@@ -1,11 +1,28 @@
 import { INCOME } from '../common/constants'
 
-export default function expenceReducer (state = [], action) {
+const initialState = {
+  isFetching: true,
+  incomesData: []
+}
+
+export default function expenceReducer (state = initialState, action) {
   const { type, payload } = action
   switch (type) {
+    case INCOME.GET_ALL.REQUEST: {
+      return {
+        isFetching: true,
+        incomesData: []
+      }
+    }
     case INCOME.GET_ALL.SUCCESS: {
       return {
-        ...payload
+        isFetching: false,
+        incomesData: payload
+      }
+    }
+    case INCOME.GET_ALL.FAIL: {
+      return {
+        isFetching: false
       }
     }
     default:

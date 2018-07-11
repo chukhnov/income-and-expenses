@@ -7,13 +7,19 @@ import FlatButton from 'material-ui/FlatButton'
 import { INCOME } from '../../common/constants'
 import { createAction } from '../../utils'
 import { IncomeWrapper } from './style'
+import IncomeForm from './IncomeForm'
 
 class Income extends Component {
   state = {
-    openNoIncomesDialog: false
+    openNoIncomesDialog: true,
+    createIncome: false
   }
   componentWillMount () {
     this.props.getIncomes()
+  }
+
+  noIncomesDialogStatus = () => {
+    return !(this.props.isFetching && this.props.incomesData.length)
   }
 
   getNoIncomesDialog = () => {
@@ -21,48 +27,60 @@ class Income extends Component {
       <FlatButton
         key={'cancel;'}
         label="Cancel"
-        onClick={this.handleClose}
+        onClick={this.props.history.goBack}
         primary
       />,
       <FlatButton
         key={'newIncome'}
         keyboardFocused
         label="Add New Income"
-        onClick={this.handleClose}
+        onClick={() => this.setState({createIncome: true})}
         primary
       />
     ]
 
-    return <Dialog
+    return this.noIncomesDialogStatus() ? <Dialog
       actions={actions}
       modal={false}
       open={this.state.openNoIncomesDialog}
-      title="Dialog With Actions"
     >
           No Incomes were found. Do you want to add first?
+    </Dialog> : null
+  }
+
+  getCreateIncomeDialog = () => {
+    return <Dialog
+      modal={false}
+      open={this.state.createIncome}
+    >
+      <IncomeForm/>
     </Dialog>
   }
 
   render () {
-    return (<IncomeWrapper>
-      <h3>INCOME</h3>
+    return <IncomeWrapper>
       {this.getNoIncomesDialog()}
-    </IncomeWrapper>)
+      {this.getCreateIncomeDialog()}
+    </IncomeWrapper>
   }
 }
 
 Income.propTypes = {
   incomesData: PropTypes.array,
-  getIncomes: PropTypes.func
+  isFetching: PropTypes.bool,
+  getIncomes: PropTypes.func,
+  history: PropTypes.object
 }
 
 function mapStateToProps (state) {
-  console.log(state)
   const {
-    incomeReducer: incomesData
+    incomeReducer: {
+      incomesData,
+      isFetching
+    }
   } = state
 
-  return { incomesData }
+  return { incomesData, isFetching }
 }
 
 export default connect(mapStateToProps, { getIncomes: createAction(INCOME.GET_ALL.REQUEST) })(Income)
