@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import {List, ListItem} from 'material-ui/List'
 import Divider from 'material-ui/Divider'
 import Avatar from 'material-ui/Avatar'
@@ -15,25 +16,35 @@ const Home = () => (
   <HomeWrapper>
     <Paper zDepth={5}>
       <List style={{width: '300px'}}>
-        <ListItem
-          rightAvatar={<Avatar icon={<IncomeIcon />} backgroundColor={green400} />}
-          primaryText="Income"
-        />
-        <Divider inset={true}/>
-        <ListItem
-          rightAvatar={<Avatar icon={<ExpenseIcon />} backgroundColor={red400} />}
-          primaryText="Expense"
-        />
-        <Divider inset={true}/>
-        <ListItem
-          rightAvatar={<Avatar icon={<ActionAssignment />} backgroundColor={yellow700} />}
-          primaryText="Categories"
-        />
-        <Divider inset={true}/>
-        <ListItem
-          rightAvatar={<Avatar icon={<EditorInsertChart />} backgroundColor={blue400} />}
-          primaryText="Statistic"
-        />
+        <Link to="/income">
+          <ListItem
+            primaryText="INCOME"
+            rightAvatar={<Avatar icon={<IncomeIcon />}
+              backgroundColor={green400} />}
+          />
+        </Link>
+        <Divider inset />
+        <Link to="/expense">
+          <ListItem
+            primaryText="EXPENSE"
+            rightAvatar={<Avatar backgroundColor={red400} icon={<ExpenseIcon />} />}
+          />
+        </Link>
+        <Divider inset />
+        <Link to="/categories">
+          <ListItem
+            primaryText="CATEGORIES"
+            rightAvatar={<Avatar backgroundColor={yellow700} icon={<ActionAssignment />} />}
+          />
+        </Link>
+        <Divider inset />
+        <Link to="/statistic">
+          <ListItem
+            primaryText="STATISTIC"
+            rightAvatar={<Avatar icon={<EditorInsertChart />}
+              backgroundColor={blue400} />}
+          />
+        </Link>
       </List>
     </Paper>
   </HomeWrapper>
