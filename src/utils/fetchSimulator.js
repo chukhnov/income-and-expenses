@@ -9,7 +9,8 @@ export const apiCall = {
   set: bodyObject => {
     const { type, data } = bodyObject
     return new Promise((resolve, reject) => {
-      setTimeout(() => resolve(localStorage.setItem(type, JSON.stringify([data, ...localStorage.getItem(type)]))), 2000)
+      localStorage.setItem(type, JSON.stringify([data, ...JSON.parse(localStorage.getItem(type)) || []]))
+      setTimeout(() => resolve(JSON.parse(localStorage.getItem(type))), 2000)
     })
   }
 }

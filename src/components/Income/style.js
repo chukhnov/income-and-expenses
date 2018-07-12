@@ -17,4 +17,25 @@ export const IncomeWrapper = styled.div`
         flex-direction: row;
         width: 50%;
     }
+
+    .table-wrapper{
+        margin: 0 50px;
+    }
+`
+
+export const FormWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+
+        form{
+            width: 50%;
+            .form-data{
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+            }
+            .submit-form-section{
+                margin-top: 50px;
+            }
+        }
 `
