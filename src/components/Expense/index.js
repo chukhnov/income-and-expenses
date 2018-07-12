@@ -21,39 +21,39 @@ import DeleteIcon from 'material-ui/svg-icons/action/delete'
 import RaisedButton from 'material-ui/RaisedButton'
 import IconButton from 'material-ui/IconButton'
 
-import { INCOME, CATEGORY } from '../../common/constants'
+import { EXPENSE, CATEGORY } from '../../common/constants'
 import { createAction } from '../../utils'
-import { IncomeWrapper } from './style'
-import IncomeForm from './IncomeForm'
+import { ExpenseWrapper } from './style'
+import ExpenseForm from './ExpenseForm'
 import Loader from '../Loader/'
 
-class Income extends Component {
+class Expense extends Component {
   state = {
-    openNoIncomesDialog: true,
-    createIncome: false,
-    selectedIncome: null
+    openNoExpensesDialog: true,
+    createExpense: false,
+    selectedExpense: null
   }
   componentWillMount () {
-    this.props.getIncomes()
+    this.props.getExpenses()
     this.props.getCategories()
   }
 
-  onCloseIncomeDialog = () => {
+  onCloseExpenseDialog = () => {
     this.setState({
-      createIncome: false,
-      selectedIncome: null
+      createExpense: false,
+      selectedExpense: null
     })
   }
 
-  noIncomesDialogStatus = () => {
+  noExpensesDialogStatus = () => {
     const {
       isFetching,
-      incomesData
+      expensesData
     } = this.props
-    return !isFetching && !incomesData.length
+    return !isFetching && !expensesData.length
   }
 
-  getNoIncomesDialog = () => {
+  getNoExpensesDialog = () => {
     const actions = [
       <Link key={'cancel'}
         to="/">
@@ -62,34 +62,34 @@ class Income extends Component {
           primary
         /></Link>,
       <FlatButton
-        key={'newIncome'}
+        key={'newExpense'}
         keyboardFocused
-        label="Add New Income"
-        onClick={() => this.setState({createIncome: true, openNoIncomesDialog: false})}
+        label="Add New Expense"
+        onClick={() => this.setState({createExpense: true, openNoExpensesDialog: false})}
         primary
       />
     ]
 
-    return this.noIncomesDialogStatus() ? <Dialog
+    return this.noExpensesDialogStatus() ? <Dialog
       actions={actions}
       modal={false}
-      open={this.state.openNoIncomesDialog}
+      open={this.state.openNoExpensesDialog}
     >
-          No Incomes were found. Do you want to add first?
+          No Expenses were found. Do you want to add first?
     </Dialog> : null
   }
 
-  getCreateIncomeDialog = () => {
+  getCreateExpenseDialog = () => {
     const { categoriesData } = this.props
-    const { selectedIncome, createIncome } = this.state
+    const { selectedExpense, createExpense } = this.state
     return <Dialog
       modal={false}
-      open={createIncome}
+      open={createExpense}
     >
-      <IncomeForm
+      <ExpenseForm
         categoriesData={categoriesData}
-        onCloseIncomeDialog={this.onCloseIncomeDialog}
-        selectedIncome={selectedIncome}
+        onCloseExpenseDialog={this.onCloseExpenseDialog}
+        selectedExpense={selectedExpense}
       />
     </Dialog>
   }
@@ -113,14 +113,14 @@ class Income extends Component {
   }
 
   render () {
-    const { isFetching, incomesData } = this.props
-    return <IncomeWrapper>
-      {this.getNoIncomesDialog()}
-      {this.getCreateIncomeDialog()}
+    const { isFetching, expensesData } = this.props
+    return <ExpenseWrapper>
+      {this.getNoExpensesDialog()}
+      {this.getCreateExpenseDialog()}
       <Loader isFetching={isFetching}/>
       <div className='table-wrapper'>
         <AppBar
-          title={<span>INCOME LIST</span>}
+          title={<span>EXPENSE LIST</span>}
           titleStyle={{textAlign: 'center'}}
           iconElementLeft={<Link to="/"><RaisedButton
             label="Main menu"
@@ -128,9 +128,9 @@ class Income extends Component {
             icon={<GoBackIcon />}
           /></Link>}
           iconElementRight={<RaisedButton
-            label="Add New Income"
+            label="Add New Expense"
             labelPosition="before"
-            onClick={() => this.setState({createIncome: true})}
+            onClick={() => this.setState({createExpense: true})}
             primary={true}
             icon={<AddNewIcon />}
           />}
@@ -156,17 +156,17 @@ class Income extends Component {
             <TableBody
               displayRowCheckbox={false}
             >
-              {incomesData.map((row, index) => (
+              {expensesData.map((row, index) => (
                 <TableRow key={index}>
                   <TableRowColumn>{this.getParsedCategory(row.category)}</TableRowColumn>
-                  <TableRowColumn>{`$${row.amount} USD`}</TableRowColumn>
+                  <TableRowColumn>{`- $${row.amount} USD`}</TableRowColumn>
                   <TableRowColumn>{this.getParsedDate(row.date)}</TableRowColumn>
                   <TableRowColumn>{row.description}</TableRowColumn>
                   <TableRowColumn>
-                    <IconButton onClick={() => this.setState({ createIncome: true, selectedIncome: row })}>
+                    <IconButton onClick={() => this.setState({ createExpense: true, selectedExpense: row })}>
                       <EditIcon />
                     </IconButton>
-                    <IconButton onClick={() => this.props.deleteIncome(row._id)} iconStyle={{fill: 'red'}}>
+                    <IconButton onClick={() => this.props.deleteExpense(row._id)} iconStyle={{fill: 'red'}}>
                       <DeleteIcon />
                     </IconButton>
                   </TableRowColumn>
@@ -176,25 +176,25 @@ class Income extends Component {
           </Table>
         </Paper>
       </div>
-    </IncomeWrapper>
+    </ExpenseWrapper>
   }
 }
 
-Income.propTypes = {
-  incomesData: PropTypes.array,
+Expense.propTypes = {
+  expensesData: PropTypes.array,
   categoriesData: PropTypes.array,
   isFetching: PropTypes.bool,
-  getIncomes: PropTypes.func,
+  getExpenses: PropTypes.func,
   getCategories: PropTypes.func,
-  deleteIncome: PropTypes.func,
+  deleteExpense: PropTypes.func,
   history: PropTypes.object
 }
 
 function mapStateToProps (state) {
   const {
-    incomeReducer: {
-      incomesData,
-      isFetching: isFetchingIncomes
+    expenseReducer: {
+      expensesData,
+      isFetching: isFetchingExpenses
     },
     categoryReducer: {
       categoriesData,
@@ -203,14 +203,14 @@ function mapStateToProps (state) {
   } = state
 
   return {
-    incomesData,
+    expensesData,
     categoriesData,
-    isFetching: isFetchingIncomes || isFetchingCategories
+    isFetching: isFetchingExpenses || isFetchingCategories
   }
 }
 
 export default connect(mapStateToProps, {
-  getIncomes: createAction(INCOME.GET_ALL.REQUEST),
-  deleteIncome: createAction(INCOME.DELETE.REQUEST),
+  getExpenses: createAction(EXPENSE.GET_ALL.REQUEST),
+  deleteExpense: createAction(EXPENSE.DELETE.REQUEST),
   getCategories: createAction(CATEGORY.GET_ALL.REQUEST)
-})(Income)
+})(Expense)

@@ -9,17 +9,17 @@ import * as Yup from 'yup'
 import { Formik, Field } from 'formik'
 import shortid from 'shortid'
 
-import { INCOME } from '../../common/constants'
+import { EXPENSE } from '../../common/constants'
 import { createAction } from '../../utils'
 import FormikSelectField from './FormikSelectField'
 import { FormWrapper } from './style'
 
-const IncomeSchema = Yup.object().shape({
+const ExpenseSchema = Yup.object().shape({
   amount: Yup.string().required('Required').min(1).max(5),
   description: Yup.string().required('Required')
 })
 
-class IncomeForm extends Component {
+class ExpenseForm extends Component {
   state = {
     selectedCategory: null,
     selectedDate: new Date(),
@@ -28,11 +28,11 @@ class IncomeForm extends Component {
   }
 
   componentWillMount () {
-    const { selectedIncome } = this.props
-    if (selectedIncome) {
-      const { date, categoryId, ...incomeData } = selectedIncome
+    const { selectedExpense } = this.props
+    if (selectedExpense) {
+      const { date, categoryId, ...expenseData } = selectedExpense
       this.setState({
-        ...incomeData,
+        ...expenseData,
         selectedDate: new Date(date),
         selectedCategory: categoryId
       })
@@ -40,7 +40,7 @@ class IncomeForm extends Component {
   }
 
   onFormSubmit = values => {
-    const { selectedIncome, createIncome, editIncome, onCloseIncomeDialog } = this.props
+    const { selectedExpense, createExpense, editExpense, onCloseExpenseDialog } = this.props
     const { amount, description } = values
     const { selectedDate, selectedCategory } = this.state
     const data = {
@@ -50,12 +50,12 @@ class IncomeForm extends Component {
       categoryId: selectedCategory
     }
 
-    onCloseIncomeDialog()
+    onCloseExpenseDialog()
 
-    if (selectedIncome) {
-      editIncome({_id: selectedIncome._id, ...data})
+    if (selectedExpense) {
+      editExpense({_id: selectedExpense._id, ...data})
     } else {
-      createIncome({_id: shortid.generate(), ...data})
+      createExpense({_id: shortid.generate(), ...data})
     }
   }
 
@@ -64,7 +64,7 @@ class IncomeForm extends Component {
     const { selectedCategory, selectedDate, amount, description } = this.state
     return <Formik
       initialValues={{ amount, description }}
-      validationSchema={IncomeSchema}
+      validationSchema={ExpenseSchema}
       onSubmit={this.onFormSubmit}
       render={props => {
         const inputFieldProps = {
@@ -108,7 +108,7 @@ class IncomeForm extends Component {
               </DropDownMenu>
               <div className='submit-form-section'>
                 <RaisedButton
-                  onClick={this.props.onCloseIncomeDialog}
+                  onClick={this.props.onCloseExpenseDialog}
                   label='Cancel'/>
                 <RaisedButton type='submit' label='Save' primary={true}/>
               </div>
@@ -120,15 +120,15 @@ class IncomeForm extends Component {
   }
 }
 
-IncomeForm.propTypes = {
+ExpenseForm.propTypes = {
   categoriesData: PropTypes.array,
-  selectedIncome: PropTypes.object,
-  createIncome: PropTypes.func,
-  editIncome: PropTypes.func,
-  onCloseIncomeDialog: PropTypes.func
+  selectedExpense: PropTypes.object,
+  createExpense: PropTypes.func,
+  editExpense: PropTypes.func,
+  onCloseExpenseDialog: PropTypes.func
 }
 
 export default connect(null, {
-  createIncome: createAction(INCOME.ADD.REQUEST),
-  editIncome: createAction(INCOME.EDIT.REQUEST)
-})(IncomeForm)
+  createExpense: createAction(EXPENSE.ADD.REQUEST),
+  editExpense: createAction(EXPENSE.EDIT.REQUEST)
+})(ExpenseForm)

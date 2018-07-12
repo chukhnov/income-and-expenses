@@ -41,6 +41,42 @@ export default function expenceReducer (state = initialState, action) {
         isFetching: false
       }
     }
+    case INCOME.DELETE.REQUEST: {
+      return {
+        ...state,
+        isFetching: true
+      }
+    }
+    case INCOME.DELETE.SUCCESS: {
+      return {
+        isFetching: false,
+        incomesData: payload
+      }
+    }
+    case INCOME.DELETE.FAIL: {
+      return {
+        ...state,
+        isFetching: false
+      }
+    }
+    case INCOME.EDIT.REQUEST: {
+      return {
+        ...state,
+        isFetching: true
+      }
+    }
+    case INCOME.EDIT.SUCCESS: {
+      return {
+        isFetching: false,
+        incomesData: payload
+      }
+    }
+    case INCOME.EDIT.FAIL: {
+      return {
+        ...state,
+        isFetching: false
+      }
+    }
     default:
       return state
   }
