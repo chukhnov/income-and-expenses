@@ -14,7 +14,7 @@ export default function categoryReducer (state = initialState, action) {
     case CATEGORY.GET_ALL.SUCCESS: {
       return {
         isFetching: false,
-        incomesData: payload
+        categoriesData: payload
       }
     }
     case CATEGORY.GET_ALL.FAIL: {
@@ -32,10 +32,46 @@ export default function categoryReducer (state = initialState, action) {
     case CATEGORY.ADD.SUCCESS: {
       return {
         isFetching: false,
-        incomesData: payload
+        categoriesData: payload
       }
     }
     case CATEGORY.ADD.FAIL: {
+      return {
+        ...state,
+        isFetching: false
+      }
+    }
+    case CATEGORY.DELETE.REQUEST: {
+      return {
+        ...state,
+        isFetching: true
+      }
+    }
+    case CATEGORY.DELETE.SUCCESS: {
+      return {
+        isFetching: false,
+        categoriesData: payload
+      }
+    }
+    case CATEGORY.DELETE.FAIL: {
+      return {
+        ...state,
+        isFetching: false
+      }
+    }
+    case CATEGORY.EDIT.REQUEST: {
+      return {
+        ...state,
+        isFetching: true
+      }
+    }
+    case CATEGORY.EDIT.SUCCESS: {
+      return {
+        isFetching: false,
+        categoriesData: payload
+      }
+    }
+    case CATEGORY.EDIT.FAIL: {
       return {
         ...state,
         isFetching: false

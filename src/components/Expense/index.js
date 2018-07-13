@@ -22,7 +22,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import IconButton from 'material-ui/IconButton'
 
 import { EXPENSE, CATEGORY } from '../../common/constants'
-import { createAction } from '../../utils'
+import { createAction, getParsedCategory, getParsedDate } from '../../utils'
 import { ExpenseWrapper } from './style'
 import ExpenseForm from './ExpenseForm'
 import Loader from '../Loader/'
@@ -94,26 +94,8 @@ class Expense extends Component {
     </Dialog>
   }
 
-  getParsedDate = input => {
-    const date = new Date(input)
-    const values = [ date.getDate(), date.getMonth() + 1 ]
-    for (var id in values) {
-      values[id] = values[id].toString().replace(/^([0-9])$/, '0$1')
-    }
-    return `${values[0]}.${values[1]}.${date.getFullYear()}`
-  }
-
-  getParsedCategory = categoryId => {
-    const { categoriesData } = this.props
-    if (categoriesData.length) {
-      const { value } = categoriesData.find(el => el._id === categoryId) || {}
-      return value || 'No Category'
-    }
-    return null || 'No Category'
-  }
-
   render () {
-    const { isFetching, expensesData } = this.props
+    const { isFetching, expensesData, categoriesData } = this.props
     return <ExpenseWrapper>
       {this.getNoExpensesDialog()}
       {this.getCreateExpenseDialog()}
@@ -158,9 +140,9 @@ class Expense extends Component {
             >
               {expensesData.map((row, index) => (
                 <TableRow key={index}>
-                  <TableRowColumn>{this.getParsedCategory(row.category)}</TableRowColumn>
+                  <TableRowColumn>{getParsedCategory(row.categoryId, categoriesData)}</TableRowColumn>
                   <TableRowColumn>{`- $${row.amount} USD`}</TableRowColumn>
-                  <TableRowColumn>{this.getParsedDate(row.date)}</TableRowColumn>
+                  <TableRowColumn>{getParsedDate(row.date)}</TableRowColumn>
                   <TableRowColumn>{row.description}</TableRowColumn>
                   <TableRowColumn>
                     <IconButton onClick={() => this.setState({ createExpense: true, selectedExpense: row })}>

@@ -120,16 +120,63 @@ function * getCategories () {
   yield put(createAction(CATEGORY.GET_ALL.SUCCESS)(categoriesData))
 }
 
+function * addCategory (action) {
+  const { payload } = action
+  const bodyObject = {
+    type: 'categories',
+    data: payload
+  }
+
+  const categoriesData = yield call(apiCall.set, bodyObject)
+  if (!categoriesData) {
+    return yield put(createAction(CATEGORY.ADD.FAIL)())
+  }
+  yield put(createAction(CATEGORY.ADD.SUCCESS)(categoriesData))
+}
+
+function * deleteCategory (action) {
+  const { payload } = action
+  const bodyObject = {
+    type: 'categories',
+    itemId: payload
+  }
+
+  const categoriesData = yield call(apiCall.delete, bodyObject)
+  if (!categoriesData) {
+    return yield put(createAction(CATEGORY.DELETE.FAIL)())
+  }
+  yield put(createAction(CATEGORY.DELETE.SUCCESS)(categoriesData))
+}
+
+function * editCategory (action) {
+  const { payload } = action
+  const bodyObject = {
+    type: 'categories',
+    data: payload
+  }
+
+  const categoriesData = yield call(apiCall.edit, bodyObject)
+  if (!categoriesData) {
+    return yield put(createAction(CATEGORY.EDIT.FAIL)())
+  }
+  yield put(createAction(CATEGORY.EDIT.SUCCESS)(categoriesData))
+}
+
 export default function * rootSaga () {
   yield all([
     takeEvery(INCOME.GET_ALL.REQUEST, getIncomes),
     takeEvery(INCOME.ADD.REQUEST, addIncome),
     takeEvery(INCOME.DELETE.REQUEST, deleteIncome),
     takeEvery(INCOME.EDIT.REQUEST, editIncome),
+
     takeEvery(EXPENSE.GET_ALL.REQUEST, getExpenses),
     takeEvery(EXPENSE.ADD.REQUEST, addExpense),
     takeEvery(EXPENSE.DELETE.REQUEST, deleteExpense),
     takeEvery(EXPENSE.EDIT.REQUEST, editExpense),
-    takeEvery(CATEGORY.GET_ALL.REQUEST, getCategories)
+
+    takeEvery(CATEGORY.GET_ALL.REQUEST, getCategories),
+    takeEvery(CATEGORY.ADD.REQUEST, addCategory),
+    takeEvery(CATEGORY.DELETE.REQUEST, deleteCategory),
+    takeEvery(CATEGORY.EDIT.REQUEST, editCategory)
   ])
 }

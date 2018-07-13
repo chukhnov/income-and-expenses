@@ -11,7 +11,7 @@ import shortid from 'shortid'
 
 import { INCOME } from '../../common/constants'
 import { createAction } from '../../utils'
-import FormikSelectField from './FormikSelectField'
+import FormikSelectField from '../FormikSelectField/'
 import { FormWrapper } from './style'
 
 const IncomeSchema = Yup.object().shape({
@@ -102,7 +102,9 @@ class IncomeForm extends Component {
                 textFieldStyle={{width: '100%'}}
                 disableYearSelection={true}
               />
-              <DropDownMenu value={selectedCategory} onChange={this.handleChange}>
+              <DropDownMenu
+                value={selectedCategory}
+                onChange={(event, index, selectedCategory) => this.setState({selectedCategory})}>
                 <MenuItem value={null} primaryText={'No Category'} />
                 {categoriesData.map((el, index) => <MenuItem key={index} value={el._id} primaryText={el.value} />)}
               </DropDownMenu>
